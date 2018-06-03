@@ -8,6 +8,7 @@
 typedef enum { false, true } bool;
 typedef void (*fptr)(int);
 
+void parse_arguments(int, char**);
 void init_matrices();
 double stopwatch(fptr, int);
 void create_and_execute(int);
@@ -25,32 +26,7 @@ bool matrix_info = false;
 
 int
 main(int argc, char* argv[]) {
-
-    if (argc == 2 && strcmp(argv[1], "-h") == 0) {
-        puts("A simple application that utilizes threads in order to do matrix multiplication.");
-        puts("Will output the calculated matrix in verbose mode. It'll only output thread finish time without verbose mode.");
-        puts("You can use -v flag to enable verbose mode!");
-        puts("You can use -m flag to enable printing matrices!");
-        return EXIT_SUCCESS;
-    }
-
-    if (argc == 2) {
-        if(strcmp(argv[1], "-v") == 0) {
-            verbose = true;
-            puts("Verbose mode enabled.");
-        }
-    }
-
-    if (argc == 3 && (strcmp(argv[1], "-v") == 0 || strcmp(argv[2], "-v") == 0)) {
-        verbose = true;
-        return EXIT_SUCCESS;
-    }
-
-    if (argc == 3 && (strcmp(argv[1], "-m") == 0 || strcmp(argv[2], "-m") == 0)) {
-        matrix_info = true;
-        return EXIT_SUCCESS;
-    }
-
+    parse_arguments(argc, argv);
     init_matrices();
     verbose && puts("Initialization complete.");
 
@@ -71,6 +47,30 @@ main(int argc, char* argv[]) {
 
     free_mem();
     return EXIT_SUCCESS;
+}
+
+void
+parse_arguments(int argc, char* argv[]) {
+    if (argc == 2) {
+        if(strcmp(argv[1], "-v") == 0) {
+            verbose = true;
+            puts("Verbose mode enabled.");
+        } else if (strcmp(argv[1], "-h") == 0) {
+            puts("A simple application that utilizes threads in order to do matrix multiplication.");
+            puts("Will output the calculated matrix in verbose mode. It'll only output thread finish time without verbose mode.");
+            puts("You can use -v flag to enable verbose mode!");
+            puts("You can use -m flag to enable printing matrices!");
+        }
+    } else if (argc == 3) {
+        if (strcmp(argv[1], "-v") == 0 || strcmp(argv[2], "-v") == 0) {
+            verbose = true;
+            puts("Verbose mode enabled.");
+        }
+        if (strcmp(argv[1], "-m") == 0 || strcmp(argv[2], "-m") == 0) {
+            matrix_info = true;
+            puts("Matrix info mode enabled.");
+        }
+    }
 }
 
 void
