@@ -16,7 +16,7 @@ void multiply(int);
 void print_matrix(int**);
 void free_mem();
 
-int size = 1500;
+int size = 1000;
 int thread_count = 0;
 int **first_matrix, **second_matrix, **result_matrix;
 bool verbose = false;
