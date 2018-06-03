@@ -16,7 +16,8 @@ void multiply(int);
 void print_matrix(int**);
 void free_mem();
 
-int size = 1000;
+struct timeval start, finish;
+int size = 1500;
 int thread_count = 0;
 int **first_matrix, **second_matrix, **result_matrix;
 bool verbose = false;
@@ -60,7 +61,7 @@ main(int argc, char* argv[]) {
         print_matrix(second_matrix);
     }
 
-    for (int i = 1; i < 50; ++i) {
+    for (int i = 1; i < 20; ++i) {
         thread_count = i;
         printf("\n======================================\n");
         printf("Time it took when thread count is %d : %f ",
@@ -97,11 +98,8 @@ init_matrices() {
 
 double
 stopwatch(fptr func, int count) {
-    struct timeval start, finish;
     double elapsed = 0;
-    gettimeofday(&start, NULL);
     func(count);
-    gettimeofday(&finish, NULL);
     elapsed = (finish.tv_sec - start.tv_sec) * 1000.0;
     elapsed += (finish.tv_usec - start.tv_usec) / 1000.0;
     return elapsed / 1000.0;
@@ -117,6 +115,7 @@ create_and_execute(count) {
     }
 
     verbose && puts("Creating threads.");
+    gettimeofday(&start, NULL);
     for (size_t i = 0; i < count; ++i) {
         if (pthread_create(&threads[i], NULL, deploy_worker, (void *)i) != 0){
             fprintf(stderr, "Can't create thread %zu\n", i);
@@ -127,6 +126,7 @@ create_and_execute(count) {
     for (int i = 0; i < count; i++) {
         pthread_join(threads[i], NULL);
     }
+    gettimeofday(&finish, NULL);
 
     if (matrix_info) {
         puts("Result is: ");

@@ -1,6 +1,6 @@
-appname := amahls
+appname := amdahls
 CXX := gcc
-CXXFLAGS := -Wall -lpthread -lcurl
+CXXFLAGS := -Wall -lpthread
 
 srcfiles := $(shell find . -name "*.c")
 objects  := $(patsubst %.c, %.o, $(srcfiles))
