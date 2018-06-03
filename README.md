@@ -1,0 +1,2 @@
+-v verbose
+-m displays created matrix info and result
